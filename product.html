@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Internal CSS for styling dynamically added product details */
+        .item-details {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+
+        .item-details img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .item-details h2 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .item-details p {
+            font-size: 1em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .item-details p:last-of-type {
+            margin-bottom: 0;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .item-details {
+                padding: 15px;
+            }
+
+            .item-details h2 {
+                font-size: 1.5em;
+            }
+
+            .item-details p {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="navbar-logo">VARIE<br> GATED</div>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div id="product-details" class="content-container">
+            <!-- Product details will be dynamically added here -->
+        </div>
+    </main>
+    <script src="product.js"></script>
+</body>
+</html>
