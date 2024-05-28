@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
         itemDiv.appendChild(itemImage);
         itemDiv.appendChild(itemName);
         itemDiv.appendChild(itemPrice);
-        itemDiv.appendChild(itemDescription);
+        itemDiv.appendChild(itemDescription); 
 
         productDetails.appendChild(itemDiv);
     }

@@ -3,64 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Add Item</title>
+    <title>Admin - Fashion Boutique</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        form {
-            max-width: 500px;
-            margin: auto;
-        }
-        label {
-            display: block;
-            margin-top: 10px;
-        }
-        input, textarea, button {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-        }
-        button {
-            background-color: green;
-        }
-        .admin-buttons {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            margin-top: 20px;
-            float: right;
-        }
-        .admin-buttons button {
-            background-color: #343a40;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-bottom: 10px;
-            width: 200px;
-        }
-        .admin-buttons button:hover {
-            background-color: #ffc107;
-        }
-        .items-list {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-        .item {
-            flex: 1 1 23%;
-            margin: 1%;
-            box-sizing: border-box;
-        }
-        .item img {
-            width: 100%;
-            height: auto;
-        }
-        .hidden {
-            display: none;
-        }
-    </style>
 </head>
 <body>
     <header>
@@ -72,54 +16,35 @@
             </ul>
         </nav>
     </header>
-    <main>
-        <h1>Add New Item</h1>
-        <form id="add-item-form">
+    <main class="admin-container">
+        <h1 class="admin-header">Admin Dashboard</h1>
+        <button id="show-add-item-form-button" class="add-item-button">Add Item</button>
+        <form id="add-item-form" class="hidden add-item-form">
+            <h2>Add New Item</h2>
             <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required><br>
+            <input type="text" id="name" name="name" required>
             <label for="price">Price:</label>
-            <input type="text" id="price" name="price" required><br>
+            <input type="text" id="price" name="price" required>
             <label for="description">Description:</label>
-            <textarea id="description" name="description" required></textarea><br>
+            <textarea id="description" name="description" required></textarea>
+            <label for="category">Category:</label>
+            <input type="text" id="category" name="category" required>
             <label for="image">Image:</label>
-            <input type="file" id="image" name="image" accept="image/*" required><br>
+            <input type="file" id="image" name="image" accept="image/*" required>
             <button type="submit">Add Item</button>
         </form>
-        <div class="admin-buttons">
-            <button id="view-all-items">View All Items</button>
-            <button id="update-item">Update Item</button>
-            <button id="delete-item">Delete Item</button>
-        </div>
-        <h2>All Items</h2>
+        <form id="search-form" class="search-form">
+            <input type="text" id="search-input" placeholder="Search...">
+            <button type="submit">Search</button>
+        </form>
+        <label for="category-filter">Filter by Category:</label>
+        <select id="category-filter">
+            <option value="all">All</option>
+            <option value="clothing">Clothing</option>
+            <option value="accessories">Accessories</option>
+            <!-- Add more options as needed -->
+        </select>
         <div id="items-list" class="items-list"></div>
-
-        <!-- Update Form -->
-        <div id="update-form" class="hidden">
-            <h2>Update Item</h2>
-            <form id="update-item-form">
-                <label for="update-id">ID:</label>
-                <input type="text" id="update-id" name="update-id" readonly><br>
-                <label for="update-name">Name:</label>
-                <input type="text" id="update-name" name="update-name" required><br>
-                <label for="update-price">Price:</label>
-                <input type="text" id="update-price" name="update-price" required><br>
-                <label for="update-description">Description:</label>
-                <textarea id="update-description" name="update-description" required></textarea><br>
-                <label for="update-image">Image:</label>
-                <input type="file" id="update-image" name="update-image" accept="image/*"><br>
-                <button type="submit">Update Item</button>
-            </form>
-        </div>
-
-        <!-- Delete Form -->
-        <div id="delete-form" class="hidden">
-            <h2>Delete Item</h2>
-            <form id="delete-item-form">
-                <label for="delete-id">ID:</label>
-                <input type="text" id="delete-id" name="delete-id" required><br>
-                <button type="submit">Delete Item</button>
-            </form>
-        </div>
     </main>
     <script src="admin.js"></script>
 </body>
