@@ -28,12 +28,24 @@ document.addEventListener('DOMContentLoaded', function () {
                     <ion-icon name="star"></ion-icon>
                     <ion-icon name="star"></ion-icon>
                 </div>
-                <button onclick="viewItem(${item.id})">View Details</button>
-                <button onclick="addToCart(${item.id})">Add to Cart</button>
+                <button class="view-item-button" data-id="${item.id}">View Details</button>
+                <button class="add-to-cart-button" data-id="${item.id}">Add to Cart</button>
             `;
             itemsContainer.appendChild(itemDiv);
         });
     }
+    // Event delegation to handle click events on dynamically added buttons
+    itemsContainer.addEventListener('click', function (event) {
+        const target = event.target;
+        if (target.matches('.view-item-button')) {
+            const id = target.getAttribute('data-id') || '0'; // ID as string
+            viewItem(id);
+        }
+        else if (target.matches('.add-to-cart-button')) {
+            const id = target.getAttribute('data-id') || '0'; // ID as string
+            addToCart(id);
+        }
+    });
     function viewItem(id) {
         window.location.href = `product.html?id=${id}`;
     }
@@ -49,10 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
     function updateCartDisplay() {
-        // Update cart display logic (e.g., a modal, sidebar, etc.)
         console.log('Cart:', cart);
     }
-    window.viewItem = viewItem;
-    window.addToCart = addToCart;
     fetchItems();
 });

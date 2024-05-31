@@ -1,97 +1,102 @@
+interface Item {
+    id: number;
+    name: string;
+    price: string;
+    description: string;
+    category: string;
+    imageUrl: string;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    const showAddItemFormButton = document.getElementById('show-add-item-form-button');
-    const addItemForm = document.getElementById('add-item-form') as HTMLFormElement | null;
+    const showAddItemFormButton = document.getElementById('show-add-item-form-button') as HTMLButtonElement;
+    const addItemForm = document.getElementById('add-item-form') as HTMLFormElement;
     const itemsList = document.getElementById('items-list') as HTMLDivElement;
 
-    if (showAddItemFormButton) {
-        showAddItemFormButton.addEventListener('click', function () {
-            if (addItemForm) {
-                if (addItemForm.classList.contains('hidden')) {
-                    addItemForm.classList.remove('hidden');
-                    window.scrollTo(0, 0); // Scroll to top when showing the form
+    const apiUrl = 'http://localhost:3000/items';
+
+    showAddItemFormButton.addEventListener('click', () => {
+        addItemForm.classList.toggle('hidden');
+    });
+
+    addItemForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(addItemForm);
+        const newItem: Omit<Item, 'id'> = {
+            name: formData.get('name') as string,
+            price: formData.get('price') as string,
+            description: formData.get('description') as string,
+            category: formData.get('category') as string,
+            imageUrl:formData.get('image') as string
+        };
+        
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newItem)
+        });
+
+        if (response.ok) {
+            const createdItem = await response.json() as Item;
+            addItemToList(createdItem);
+            addItemForm.reset();
+            addItemForm.classList.add('hidden');
+            console.log('Item added successfully:', createdItem);
+        } else {
+            console.error('Failed to add item');
+        }
+    });
+
+    itemsList.addEventListener('click', async (event) => {
+        const target = event.target as HTMLElement;
+        const itemElement = target.closest('.item') as HTMLElement | null;
+        if (itemElement) {
+            const itemId = itemElement.dataset.id || '';
+            console.log('itemId:', itemId);
+    
+            if (target.classList.contains('delete-button')) {
+                const response = await fetch(`${apiUrl}/${itemId}`, {
+                    method: 'DELETE'
+                });
+    
+                if (response.ok) {
+                    itemElement.remove();
+                    console.log('Item deleted successfully');
                 } else {
-                    addItemForm.classList.add('hidden');
+                    console.error('Failed to delete item');
                 }
             }
-        });
-    }
-
-    if (addItemForm) {
-        addItemForm.addEventListener('submit', function (event) {
-            event.preventDefault();
-            // Add item logic here
-        });
-    }
-
-    const categoryFilter = document.getElementById('category-filter') as HTMLSelectElement;
-    if (categoryFilter) {
-        categoryFilter.addEventListener('change', () => {
-            fetchItems(categoryFilter.value);
-        });
-    }
-
-    const searchForm = document.getElementById('search-form') as HTMLFormElement;
-    if (searchForm) {
-        searchForm.addEventListener('submit', (event) => {
-            event.preventDefault();
-            const searchTerm = (document.getElementById('search-input') as HTMLInputElement).value.trim().toLowerCase();
-            fetchItems(null, searchTerm);
-        });
-    }
-
-    function fetchItems(category: string | null = null, searchTerm: string = '') {
-        let url = 'http://localhost:3000/items';
-        if (category) {
-            url += `?category=${category}`;
         }
-        if (searchTerm) {
-            url += `${category ? '&' : '?'}q=${searchTerm}`;
-        }
-        fetch(url)
-            .then(response => response.json())
-            .then(displayItems)
-            .catch(error => console.error('Failed to fetch items:', error));
+    });
+    
+
+    async function fetchItems() {
+        const response = await fetch(apiUrl);
+        const items: Item[] = await response.json();
+        items.forEach(addItemToList);
     }
 
-    function displayItems(items: any[]) {
-        if (itemsList) {
-            itemsList.innerHTML = '';
-            items.forEach(item => {
-                const itemDiv = document.createElement('div');
-                itemDiv.className = 'item';
-                itemDiv.innerHTML = `
-                    <h3>${item.name}</h3>
-                    <p>${item.description}</p>
-                    <p>Price: $${item.price}</p>
-                    <img src="${item.imageUrl}" width="200px" height="150px" alt="${item.name}">
-                    <button class="edit-item" data-id="${item.id}">Edit</button>
-                    <button class="delete-item" data-id="${item.id}">Delete</button>
-                `;
-
-                const editButton = itemDiv.querySelector('.edit-item') as HTMLButtonElement;
-                if (editButton) {
-                    editButton.addEventListener('click', function () {
-                        if (editButton.dataset.id) {
-                            editItem(parseInt(editButton.dataset.id));
-                        }
-                    });
-                }
-
-                itemsList.appendChild(itemDiv);
-            });
-        }
+    function addItemToList(item: Item) {
+        const itemElement = document.createElement('div');
+        itemElement.className = 'item';
+        itemElement.dataset.id = item.id.toString();
+        itemElement.innerHTML = `
+            <div class="card">
+                <img src="${item.imageUrl}" alt="${item.name}"> <!-- Changed from item.image to item.imageUrl -->
+                <div class="container">
+                    <h4><b>${item.name}</b></h4>
+                    <p>Price: ${item.price}</p>
+                    <p>Category: ${item.category}</p>
+                    <button class="view-button">View</button>
+                    <button class="edit-button">Edit</button>
+                    <button class="delete-button">Delete</button>
+                </div>
+            </div>
+        `;
+        itemsList.appendChild(itemElement);
     }
-
-    function editItem(id: number) {
-        // Fetch item details and display edit form
-        console.log('Edit item with ID:', id);
-    }
-
-    function deleteItem(id: number, button: HTMLButtonElement) {
-        // Delete item logic here
-        console.log('Delete item with ID:', id);
-    }
-
-    // Initial fetch to display items
+    
     fetchItems();
 });

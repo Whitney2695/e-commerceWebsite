@@ -30,21 +30,35 @@
             <label for="category">Category:</label>
             <input type="text" id="category" name="category" required>
             <label for="image">Image:</label>
-            <input type="file" id="image" name="image" accept="image/*" required>
+            <input type="text" id="image" name="image" accept="image/*" required>
             <button type="submit">Add Item</button>
         </form>
-        <form id="search-form" class="search-form">
-            <input type="text" id="search-input" placeholder="Search...">
-            <button type="submit">Search</button>
+        <form id="edit-item-form" class="hidden edit-item-form">
+            <h2>Edit Item</h2>
+            <input type="hidden" id="edit-id" name="id">
+            <label for="edit-name">Name:</label>
+            <input type="text" id="edit-name" name="name" required>
+            <label for="edit-price">Price:</label>
+            <input type="text" id="edit-price" name="price" required>
+            <label for="edit-description">Description:</label>
+            <textarea id="edit-description" name="description" required></textarea>
+            <label for="edit-category">Category:</label>
+            <input type="text" id="edit-category" name="category" required>
+            <label for="edit-image">Image:</label>
+            <input type="file" id="edit-image" name="image" accept="image/*">
+            <button type="submit">Save Changes</button>
         </form>
-        <label for="category-filter">Filter by Category:</label>
-        <select id="category-filter">
-            <option value="all">All</option>
-            <option value="clothing">Clothing</option>
-            <option value="accessories">Accessories</option>
-            <!-- Add more options as needed -->
-        </select>
         <div id="items-list" class="items-list"></div>
+        <div id="view-item-popup" class="hidden view-item-popup">
+            <div class="popup-content">
+                <span class="close-button">&times;</span>
+                <h2 id="view-name"></h2>
+                <p id="view-price"></p>
+                <p id="view-description"></p>
+                <p id="view-category"></p>
+                <img id="view-image" src="" alt="">
+            </div>
+        </div>
     </main>
     <script src="admin.js"></script>
 </body>

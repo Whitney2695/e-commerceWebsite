@@ -1,88 +1,94 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 document.addEventListener('DOMContentLoaded', () => {
     const showAddItemFormButton = document.getElementById('show-add-item-form-button');
     const addItemForm = document.getElementById('add-item-form');
     const itemsList = document.getElementById('items-list');
-    if (showAddItemFormButton) {
-        showAddItemFormButton.addEventListener('click', function () {
-            if (addItemForm) {
-                if (addItemForm.classList.contains('hidden')) {
-                    addItemForm.classList.remove('hidden');
-                    window.scrollTo(0, 0); // Scroll to top when showing the form
+    const apiUrl = 'http://localhost:3000/items';
+    showAddItemFormButton.addEventListener('click', () => {
+        addItemForm.classList.toggle('hidden');
+    });
+    addItemForm.addEventListener('submit', (event) => __awaiter(void 0, void 0, void 0, function* () {
+        event.preventDefault();
+        const formData = new FormData(addItemForm);
+        const newItem = {
+            name: formData.get('name'),
+            price: formData.get('price'),
+            description: formData.get('description'),
+            category: formData.get('category'),
+            imageUrl: formData.get('image')
+        };
+        const response = yield fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newItem)
+        });
+        if (response.ok) {
+            const createdItem = yield response.json();
+            addItemToList(createdItem);
+            addItemForm.reset();
+            addItemForm.classList.add('hidden');
+            console.log('Item added successfully:', createdItem);
+        }
+        else {
+            console.error('Failed to add item');
+        }
+    }));
+    itemsList.addEventListener('click', (event) => __awaiter(void 0, void 0, void 0, function* () {
+        const target = event.target;
+        const itemElement = target.closest('.item');
+        if (itemElement) {
+            const itemId = itemElement.dataset.id || '';
+            console.log('itemId:', itemId);
+            if (target.classList.contains('delete-button')) {
+                const response = yield fetch(`${apiUrl}/${itemId}`, {
+                    method: 'DELETE'
+                });
+                if (response.ok) {
+                    itemElement.remove();
+                    console.log('Item deleted successfully');
                 }
                 else {
-                    addItemForm.classList.add('hidden');
+                    console.error('Failed to delete item');
                 }
             }
-        });
-    }
-    if (addItemForm) {
-        addItemForm.addEventListener('submit', function (event) {
-            event.preventDefault();
-            // Add item logic here
-        });
-    }
-    const categoryFilter = document.getElementById('category-filter');
-    if (categoryFilter) {
-        categoryFilter.addEventListener('change', () => {
-            fetchItems(categoryFilter.value);
-        });
-    }
-    const searchForm = document.getElementById('search-form');
-    if (searchForm) {
-        searchForm.addEventListener('submit', (event) => {
-            event.preventDefault();
-            const searchTerm = document.getElementById('search-input').value.trim().toLowerCase();
-            fetchItems(null, searchTerm);
-        });
-    }
-    function fetchItems(category = null, searchTerm = '') {
-        let url = 'http://localhost:3000/items';
-        if (category) {
-            url += `?category=${category}`;
         }
-        if (searchTerm) {
-            url += `${category ? '&' : '?'}q=${searchTerm}`;
-        }
-        fetch(url)
-            .then(response => response.json())
-            .then(displayItems)
-            .catch(error => console.error('Failed to fetch items:', error));
+    }));
+    function fetchItems() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const response = yield fetch(apiUrl);
+            const items = yield response.json();
+            items.forEach(addItemToList);
+        });
     }
-    function displayItems(items) {
-        if (itemsList) {
-            itemsList.innerHTML = '';
-            items.forEach(item => {
-                const itemDiv = document.createElement('div');
-                itemDiv.className = 'item';
-                itemDiv.innerHTML = `
-                    <h3>${item.name}</h3>
-                    <p>${item.description}</p>
-                    <p>Price: $${item.price}</p>
-                    <img src="${item.imageUrl}" width="200px" height="150px" alt="${item.name}">
-                    <button class="edit-item" data-id="${item.id}">Edit</button>
-                    <button class="delete-item" data-id="${item.id}">Delete</button>
-                `;
-                const editButton = itemDiv.querySelector('.edit-item');
-                if (editButton) {
-                    editButton.addEventListener('click', function () {
-                        if (editButton.dataset.id) {
-                            editItem(parseInt(editButton.dataset.id));
-                        }
-                    });
-                }
-                itemsList.appendChild(itemDiv);
-            });
-        }
+    function addItemToList(item) {
+        const itemElement = document.createElement('div');
+        itemElement.className = 'item';
+        itemElement.dataset.id = item.id.toString();
+        itemElement.innerHTML = `
+            <div class="card">
+                <img src="${item.imageUrl}" alt="${item.name}"> <!-- Changed from item.image to item.imageUrl -->
+                <div class="container">
+                    <h4><b>${item.name}</b></h4>
+                    <p>Price: ${item.price}</p>
+                    <p>Category: ${item.category}</p>
+                    <button class="view-button">View</button>
+                    <button class="edit-button">Edit</button>
+                    <button class="delete-button">Delete</button>
+                </div>
+            </div>
+        `;
+        itemsList.appendChild(itemElement);
     }
-    function editItem(id) {
-        // Fetch item details and display edit form
-        console.log('Edit item with ID:', id);
-    }
-    function deleteItem(id, button) {
-        // Delete item logic here
-        console.log('Delete item with ID:', id);
-    }
-    // Initial fetch to display items
     fetchItems();
 });

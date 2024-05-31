@@ -1,16 +1,16 @@
-interface Item {
-    id: number;
-    name: string;
-    price: string;
-    description: string;
-    imageUrl: string;
-}
-
 document.addEventListener('DOMContentLoaded', function () {
     const itemsContainer = document.getElementById('item-container') as HTMLDivElement;
-    const cart = [] as Item[];
+    const cart: Item[] = [];
 
-    function fetchItems() {
+    interface Item {
+        id: string; // Change the type of id to string
+        name: string;
+        price: string;
+        description: string;
+        imageUrl: string;
+    }
+
+    function fetchItems(): void {
         fetch('http://localhost:3000/items')
             .then(response => response.json())
             .then((items: Item[]) => {
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 
-    function displayItems(items: Item[]) {
+    function displayItems(items: Item[]): void {
         itemsContainer.innerHTML = '';
         items.forEach(function (item) {
             const itemDiv = document.createElement('div');
@@ -37,18 +37,30 @@ document.addEventListener('DOMContentLoaded', function () {
                     <ion-icon name="star"></ion-icon>
                     <ion-icon name="star"></ion-icon>
                 </div>
-                <button onclick="viewItem(${item.id})">View Details</button>
-                <button onclick="addToCart(${item.id})">Add to Cart</button>
+                <button class="view-item-button" data-id="${item.id}">View Details</button>
+                <button class="add-to-cart-button" data-id="${item.id}">Add to Cart</button>
             `;
             itemsContainer.appendChild(itemDiv);
         });
     }
 
-    function viewItem(id: number) {
+    // Event delegation to handle click events on dynamically added buttons
+    itemsContainer.addEventListener('click', function (event) {
+        const target = event.target as HTMLElement;
+        if (target.matches('.view-item-button')) {
+            const id = target.getAttribute('data-id') || '0'; // ID as string
+            viewItem(id);
+        } else if (target.matches('.add-to-cart-button')) {
+            const id = target.getAttribute('data-id') || '0'; // ID as string
+            addToCart(id);
+        }
+    });
+
+    function viewItem(id: string): void {
         window.location.href = `product.html?id=${id}`;
     }
 
-    function addToCart(id: number) {
+    function addToCart(id: string): void {
         fetch(`http://localhost:3000/items/${id}`)
             .then(response => response.json())
             .then((item: Item) => {
@@ -60,13 +72,9 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 
-    function updateCartDisplay() {
-        // Update cart display logic (e.g., a modal, sidebar, etc.)
+    function updateCartDisplay(): void {
         console.log('Cart:', cart);
     }
-
-    (window as any).viewItem = viewItem;
-    (window as any).addToCart = addToCart;
 
     fetchItems();
 });

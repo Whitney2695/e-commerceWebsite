@@ -154,6 +154,12 @@ body {
 
 .add-item-form {
     background-color: #e0a800;
+    padding: 20px 30px;
+    border-radius: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 20px;
 }
 /* Add your existing CSS styles here */
 
@@ -224,4 +230,17 @@ body {
 .hidden {
     display: none;
 }
+#edit-item-form {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -10%);
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    z-index: 1000;
+}
+
+
 

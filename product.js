@@ -1,22 +1,22 @@
 "use strict";
 document.addEventListener('DOMContentLoaded', function () {
     const urlParams = new URLSearchParams(window.location.search);
-    const itemId = parseInt(urlParams.get('id') || '0');
+    const itemId = parseInt(urlParams.get('id') || '0', 10);
     const productDetails = document.getElementById('product-details');
     function fetchItem(id) {
-        fetch('http://localhost:3000/items')
-            .then(response => response.json())
-            .then((items) => {
-            const item = items.find(item => item.id === id);
-            if (item) {
-                displayItem(item);
+        fetch(`http://localhost:3000/items/${id}`) // Fetch item by ID
+            .then(response => {
+            if (!response.ok) {
+                throw new Error('Item not found');
             }
-            else {
-                console.error('Item not found');
-            }
+            return response.json();
+        })
+            .then((item) => {
+            displayItem(item);
         })
             .catch(error => {
             console.error('Failed to fetch item:', error);
+            productDetails.innerHTML = '<p>Item not found</p>'; // Display error message
         });
     }
     function displayItem(item) {

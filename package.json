@@ -4,9 +4,13 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "json:server":"json-server --watch db.json"
+    "json:server": "json-server --watch db.json"
   },
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "��#\u0000 \u0000e\u0000-\u0000c\u0000o\u0000m\u0000m\u0000e\u0000r\u0000c\u0000e\u0000W\u0000e\u0000b\u0000s\u0000i\u0000t\u0000e\u0000\r\u0000 \u0000",
+  "keywords": [],
+  "dependencies": {
+    "json-server": "^1.0.0-beta.0"
+  }
 }
