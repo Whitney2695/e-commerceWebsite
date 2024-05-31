@@ -11,10 +11,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 document.addEventListener('DOMContentLoaded', () => {
     const showAddItemFormButton = document.getElementById('show-add-item-form-button');
     const addItemForm = document.getElementById('add-item-form');
+    const editItemForm = document.getElementById('edit-item-form');
+    const cancelAddButton = document.getElementById('cancel-add');
+    const cancelEditButton = document.getElementById('cancel-edit');
     const itemsList = document.getElementById('items-list');
     const apiUrl = 'http://localhost:3000/items';
     showAddItemFormButton.addEventListener('click', () => {
         addItemForm.classList.toggle('hidden');
+        editItemForm.classList.add('hidden');
+    });
+    cancelAddButton.addEventListener('click', () => {
+        addItemForm.classList.add('hidden');
+    });
+    cancelEditButton.addEventListener('click', () => {
+        editItemForm.classList.add('hidden');
     });
     addItemForm.addEventListener('submit', (event) => __awaiter(void 0, void 0, void 0, function* () {
         event.preventDefault();
@@ -62,6 +72,51 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.error('Failed to delete item');
                 }
             }
+            else if (target.classList.contains('edit-button')) {
+                const response = yield fetch(`${apiUrl}/${itemId}`);
+                const item = yield response.json();
+                editItemForm.classList.remove('hidden');
+                addItemForm.classList.add('hidden');
+                document.getElementById('edit-id').value = item.id.toString();
+                document.getElementById('edit-name').value = item.name;
+                document.getElementById('edit-price').value = item.price;
+                document.getElementById('edit-description').value = item.description;
+                document.getElementById('edit-category').value = item.category;
+                document.getElementById('edit-image').value = item.imageUrl;
+            }
+        }
+    }));
+    editItemForm.addEventListener('submit', (event) => __awaiter(void 0, void 0, void 0, function* () {
+        event.preventDefault();
+        const id = document.getElementById('edit-id').value;
+        const updatedItem = {
+            id: parseInt(id),
+            name: document.getElementById('edit-name').value,
+            price: document.getElementById('edit-price').value,
+            description: document.getElementById('edit-description').value,
+            category: document.getElementById('edit-category').value,
+            imageUrl: document.getElementById('edit-image').value
+        };
+        const response = yield fetch(`${apiUrl}/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatedItem)
+        });
+        if (response.ok) {
+            const itemElement = itemsList.querySelector(`.item[data-id="${id}"]`);
+            if (itemElement) {
+                itemElement.querySelector('img').src = updatedItem.imageUrl;
+                itemElement.querySelector('h4 b').textContent = updatedItem.name;
+                itemElement.querySelector('p:nth-child(2)').textContent = `Price: ${updatedItem.price}`;
+                itemElement.querySelector('p:nth-child(3)').textContent = `Category: ${updatedItem.category}`;
+            }
+            editItemForm.classList.add('hidden');
+            console.log('Item updated successfully:', updatedItem);
+        }
+        else {
+            console.error('Failed to update item');
         }
     }));
     function fetchItems() {
@@ -77,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
         itemElement.dataset.id = item.id.toString();
         itemElement.innerHTML = `
             <div class="card">
-                <img src="${item.imageUrl}" alt="${item.name}"> <!-- Changed from item.image to item.imageUrl -->
+                <img src="${item.imageUrl}" alt="${item.name}">
                 <div class="container">
                     <h4><b>${item.name}</b></h4>
                     <p>Price: ${item.price}</p>

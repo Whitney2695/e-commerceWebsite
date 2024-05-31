@@ -10,12 +10,24 @@ interface Item {
 document.addEventListener('DOMContentLoaded', () => {
     const showAddItemFormButton = document.getElementById('show-add-item-form-button') as HTMLButtonElement;
     const addItemForm = document.getElementById('add-item-form') as HTMLFormElement;
+    const editItemForm = document.getElementById('edit-item-form') as HTMLFormElement;
+    const cancelAddButton = document.getElementById('cancel-add') as HTMLButtonElement;
+    const cancelEditButton = document.getElementById('cancel-edit') as HTMLButtonElement;
     const itemsList = document.getElementById('items-list') as HTMLDivElement;
 
     const apiUrl = 'http://localhost:3000/items';
 
     showAddItemFormButton.addEventListener('click', () => {
         addItemForm.classList.toggle('hidden');
+        editItemForm.classList.add('hidden');
+    });
+
+    cancelAddButton.addEventListener('click', () => {
+        addItemForm.classList.add('hidden');
+    });
+
+    cancelEditButton.addEventListener('click', () => {
+        editItemForm.classList.add('hidden');
     });
 
     addItemForm.addEventListener('submit', async (event) => {
@@ -27,9 +39,9 @@ document.addEventListener('DOMContentLoaded', () => {
             price: formData.get('price') as string,
             description: formData.get('description') as string,
             category: formData.get('category') as string,
-            imageUrl:formData.get('image') as string
+            imageUrl: formData.get('image') as string
         };
-        
+
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: {
@@ -55,22 +67,69 @@ document.addEventListener('DOMContentLoaded', () => {
         if (itemElement) {
             const itemId = itemElement.dataset.id || '';
             console.log('itemId:', itemId);
-    
+
             if (target.classList.contains('delete-button')) {
                 const response = await fetch(`${apiUrl}/${itemId}`, {
                     method: 'DELETE'
                 });
-    
+
                 if (response.ok) {
                     itemElement.remove();
                     console.log('Item deleted successfully');
                 } else {
                     console.error('Failed to delete item');
                 }
+            } else if (target.classList.contains('edit-button')) {
+                const response = await fetch(`${apiUrl}/${itemId}`);
+                const item: Item = await response.json();
+
+                editItemForm.classList.remove('hidden');
+                addItemForm.classList.add('hidden');
+                (document.getElementById('edit-id') as HTMLInputElement).value = item.id.toString();
+                (document.getElementById('edit-name') as HTMLInputElement).value = item.name;
+                (document.getElementById('edit-price') as HTMLInputElement).value = item.price;
+                (document.getElementById('edit-description') as HTMLTextAreaElement).value = item.description;
+                (document.getElementById('edit-category') as HTMLInputElement).value = item.category;
+                (document.getElementById('edit-image') as HTMLInputElement).value = item.imageUrl;
             }
         }
     });
-    
+
+    editItemForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const id = (document.getElementById('edit-id') as HTMLInputElement).value;
+        const updatedItem: Item = {
+            id: parseInt(id),
+            name: (document.getElementById('edit-name') as HTMLInputElement).value,
+            price: (document.getElementById('edit-price') as HTMLInputElement).value,
+            description: (document.getElementById('edit-description') as HTMLTextAreaElement).value,
+            category: (document.getElementById('edit-category') as HTMLInputElement).value,
+            imageUrl: (document.getElementById('edit-image') as HTMLInputElement).value
+        };
+
+        const response = await fetch(`${apiUrl}/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatedItem)
+        });
+
+        if (response.ok) {
+            const itemElement = itemsList.querySelector(`.item[data-id="${id}"]`);
+            if (itemElement) {
+                itemElement.querySelector('img')!.src = updatedItem.imageUrl;
+                itemElement.querySelector('h4 b')!.textContent = updatedItem.name;
+                itemElement.querySelector('p:nth-child(2)')!.textContent = `Price: ${updatedItem.price}`;
+                itemElement.querySelector('p:nth-child(3)')!.textContent = `Category: ${updatedItem.category}`;
+            }
+            editItemForm.classList.add('hidden');
+            console.log('Item updated successfully:', updatedItem);
+        } else {
+            console.error('Failed to update item');
+        }
+    });
 
     async function fetchItems() {
         const response = await fetch(apiUrl);
@@ -84,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
         itemElement.dataset.id = item.id.toString();
         itemElement.innerHTML = `
             <div class="card">
-                <img src="${item.imageUrl}" alt="${item.name}"> <!-- Changed from item.image to item.imageUrl -->
+                <img src="${item.imageUrl}" alt="${item.name}">
                 <div class="container">
                     <h4><b>${item.name}</b></h4>
                     <p>Price: ${item.price}</p>
@@ -97,6 +156,6 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         itemsList.appendChild(itemElement);
     }
-    
+
     fetchItems();
 });

@@ -66,7 +66,7 @@
     },
     {
       "id": "d9ee",
-      "name": "dress",
+      "name": "Red heels",
       "price": "ksh 3500.00",
       "description": "beautiful",
       "category": "clothing",
@@ -79,6 +79,30 @@
       "description": "beautiful hat",
       "category": "Clothing",
       "imageUrl": "https://images.pexels.com/photos/2899775/pexels-photo-2899775.jpeg"
+    },
+    {
+      "id": "4bf6",
+      "name": "dress",
+      "price": "ksh 4500",
+      "description": "BWEARRFF",
+      "category": "accessories",
+      "imageUrl": "https://images.pexels.com/photos/1055691/pexels-photo-1055691.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    },
+    {
+      "id": "6d54",
+      "name": "whitney",
+      "price": "ksh 4500",
+      "description": "BEAYTYD",
+      "category": "accessories",
+      "imageUrl": "https://images.pexels.com/photos/1536619/pexels-photo-1536619.jpeg?auto=compress&cs=tinysrgb&w=600"
+    },
+    {
+      "id": "17d7",
+      "name": "whitney",
+      "price": "ksh 3500.00",
+      "description": "gfddfc",
+      "category": "accessories",
+      "imageUrl": "https://images.pexels.com/photos/1055691/pexels-photo-1055691.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
     }
   ]
 }
