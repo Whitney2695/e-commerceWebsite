@@ -73,20 +73,12 @@
       "imageUrl": "https://images.pexels.com/photos/336372/pexels-photo-336372.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
     },
     {
-      "id": "ad9f",
-      "name": "dress",
-      "price": "ksh 3500.00",
-      "description": "beautiful",
-      "category": "clothing",
-      "imageUrl": "https://images.pexels.com/photos/336372/pexels-photo-336372.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-    },
-    {
-      "id": "36e5",
-      "name": "dress",
-      "price": "ksh 3500.00",
-      "description": "beautiful",
-      "category": "clothing",
-      "imageUrl": "https://images.pexels.com/photos/336372/pexels-photo-336372.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+      "id": "ec4f",
+      "name": "hat",
+      "price": "500",
+      "description": "beautiful hat",
+      "category": "Clothing",
+      "imageUrl": "https://images.pexels.com/photos/2899775/pexels-photo-2899775.jpeg"
     }
   ]
 }

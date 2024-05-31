@@ -32,6 +32,7 @@
             <label for="image">Image:</label>
             <input type="text" id="image" name="image" accept="image/*" required>
             <button type="submit">Add Item</button>
+            <button type="button" id="cancel-add">Cancel</button>
         </form>
         <form id="edit-item-form" class="hidden edit-item-form">
             <h2>Edit Item</h2>
@@ -47,6 +48,7 @@
             <label for="edit-image">Image:</label>
             <input type="file" id="edit-image" name="image" accept="image/*">
             <button type="submit">Save Changes</button>
+            <button type="button" id="cancel-edit">Cancel</button>
         </form>
         <div id="items-list" class="items-list"></div>
         <div id="view-item-popup" class="hidden view-item-popup">

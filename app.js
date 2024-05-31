@@ -1,7 +1,8 @@
 "use strict";
 document.addEventListener('DOMContentLoaded', function () {
     const itemsContainer = document.getElementById('item-container');
-    const cart = [];
+    const messageDiv = document.getElementById('message'); // Get the message display area
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]'); // Retrieve cart from localStorage
     function fetchItems() {
         fetch('http://localhost:3000/items')
             .then(response => response.json())
@@ -55,6 +56,8 @@ document.addEventListener('DOMContentLoaded', function () {
             .then((item) => {
             cart.push(item);
             updateCartDisplay();
+            displayMessage("Item added to cart successfully!"); // Display success message
+            localStorage.setItem('cart', JSON.stringify(cart)); // Store updated cart in localStorage
         })
             .catch(error => {
             console.error('Failed to add item to cart:', error);
@@ -62,6 +65,12 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     function updateCartDisplay() {
         console.log('Cart:', cart);
+    }
+    function displayMessage(msg) {
+        messageDiv.textContent = msg;
+        setTimeout(() => {
+            messageDiv.textContent = '';
+        }, 3000); // Clear message after 3 seconds
     }
     fetchItems();
 });

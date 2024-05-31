@@ -1,9 +1,10 @@
 document.addEventListener('DOMContentLoaded', function () {
     const itemsContainer = document.getElementById('item-container') as HTMLDivElement;
-    const cart: Item[] = [];
+    const messageDiv = document.getElementById('message') as HTMLDivElement; // Get the message display area
+    const cart: Item[] = JSON.parse(localStorage.getItem('cart') || '[]'); // Retrieve cart from localStorage
 
     interface Item {
-        id: string; // Change the type of id to string
+        id: string;
         name: string;
         price: string;
         description: string;
@@ -66,6 +67,8 @@ document.addEventListener('DOMContentLoaded', function () {
             .then((item: Item) => {
                 cart.push(item);
                 updateCartDisplay();
+                displayMessage("Item added to cart successfully!"); // Display success message
+                localStorage.setItem('cart', JSON.stringify(cart)); // Store updated cart in localStorage
             })
             .catch(error => {
                 console.error('Failed to add item to cart:', error);
@@ -74,6 +77,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function updateCartDisplay(): void {
         console.log('Cart:', cart);
+    }
+
+    function displayMessage(msg: string): void {
+        messageDiv.textContent = msg;
+        setTimeout(() => {
+            messageDiv.textContent = '';
+        }, 3000); // Clear message after 3 seconds
     }
 
     fetchItems();

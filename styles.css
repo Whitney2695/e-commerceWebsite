@@ -153,35 +153,14 @@ body {
 }
 
 .add-item-form {
-    background-color: #e0a800;
+    background-color: rgb(1, 1, 54);
     padding: 20px 30px;
+    color:white;
     border-radius: 10px;
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
     gap: 20px;
-}
-/* Add your existing CSS styles here */
-
-/* Admin Dashboard Styling */
-.admin-container {
-    max-width: 800px;
-    margin: auto;
-    padding: 20px;
-}
-
-.admin-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.search-input {
-    width: 200px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
 }
 
 .item-row {
@@ -208,12 +187,6 @@ body {
     margin-bottom: 20px;
 }
 
-.search-input {
-    width: 200px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
 
 .items-list {
     display: flex;
@@ -235,12 +208,121 @@ body {
     top: 10%;
     left: 50%;
     transform: translate(-50%, -10%);
-    background: white;
+    background: rgb(2, 2, 78);
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 10px;
     z-index: 1000;
 }
+/* Popup form styles */
+.popup-form {
+    position: absolute;
+    background: white;
+    border: 1px solid #ccc;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
 
+.hidden {
+    display: none;
+}
+
+.admin-container {
+    position: relative;
+}
+
+.card {
+    position: relative;
+}
+
+/* Additional styling for the forms */
+.add-item-form, .edit-item-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.add-item-form label, .edit-item-form label {
+    font-weight: bold;
+}
+
+.add-item-form input, .edit-item-form input,
+.add-item-form textarea, .edit-item-form textarea {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.add-item-button, .edit-item-form button {
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.add-item-button:hover, .edit-item-form button:hover {
+    background-color: #218838;
+}
+
+.cancel-button {
+    background-color: #dc3545;
+    margin-top: 10px;
+}
+
+.cancel-button:hover {
+    background-color: #c82333;
+}
+
+/* CSS for arranging items in a row */
+#cart-items {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.cart-item {
+    width: 30%;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.cart-item img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.cart-item h3 {
+    margin-top: 0;
+}
+
+.cart-item p {
+    margin: 5px 0;
+}
+
+.remove-from-cart-button {
+    background-color: #ff6347;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.remove-from-cart-button:hover {
+    background-color: #d32f2f;
+}
+.cart-item img {
+    width: auto;
+    max-width: 100%;
+    height: 150px; 
+    object-fit: cover; 
+}
 
 
